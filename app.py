@@ -71,7 +71,7 @@ if uploaded_sto_excel and uploaded_project_file:
         gdf_joined["longitude"] = gdf_joined.centroid.x
 
         # Output
-        output_df = gdf_joined[["Name", "STO", "latitude", "longitude"]]
+        output_df = gdf_joined[["Datel", "Nama STO", "latitude", "longitude"]]
         output_df.columns = ["Nama Project", "Nama STO", "Latitude", "Longitude"]
 
         st.success("🎉 Mapping selesai!")
