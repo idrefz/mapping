@@ -8,16 +8,16 @@ from io import BytesIO
 st.set_page_config(page_title="Mapping Project ke STO", layout="centered")
 st.title("📍 Mapping Project Polygon ke Area STO")
 
-# Upload STO dari CSV
-uploaded_sto_csv = st.file_uploader("📄 Upload CSV STO (berisi kolom WKT dan Nama ODC)", type=["csv"])
+# Upload STO dari Excel
+uploaded_sto_excel = st.file_uploader("📄 Upload Excel STO (berisi kolom WKT dan Nama ODC)", type=["xlsx"])
 
 # Upload Polygon Project KML
 uploaded_project_file = st.file_uploader("📦 Upload Polygon Project (.kml)", type=["kml"])
 
-if uploaded_sto_csv and uploaded_project_file:
+if uploaded_sto_excel and uploaded_project_file:
     try:
-        # Baca STO dari CSV
-        df_sto = pd.read_csv(uploaded_sto_csv, sep=",", quotechar='"')
+        # Baca STO dari Excel
+        df_sto = pd.read_excel(uploaded_sto_excel)
         df_sto["geometry"] = df_sto["Polygon dalam Format WKT"].apply(wkt.loads)
         gdf_sto = gpd.GeoDataFrame(df_sto, geometry="geometry", crs="EPSG:4326")
 
