@@ -17,7 +17,7 @@ uploaded_project_file = st.file_uploader("📦 Upload Polygon Project (.kml)", t
 if uploaded_sto_csv and uploaded_project_file:
     try:
         # Baca STO dari CSV
-        df_sto = pd.read_csv(uploaded_sto_csv)
+        df_sto = pd.read_csv(uploaded_sto_csv, sep=",", quotechar='"')
         df_sto["geometry"] = df_sto["Polygon dalam Format WKT"].apply(wkt.loads)
         gdf_sto = gpd.GeoDataFrame(df_sto, geometry="geometry", crs="EPSG:4326")
 
