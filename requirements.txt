@@ -1,7 +1,7 @@
 streamlit
+pandas
 geopandas
 shapely
 fiona
-gdal
-pandas
-xlsxwriter
+pyproj
+openpyxl
