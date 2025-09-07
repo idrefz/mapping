@@ -183,12 +183,41 @@ with st.form("survey_form"):
         loc = st_folium(m, width=350, height=250)
         latitude = None
         longitude = None
+
+        # State untuk koordinat otomatis
+        if "auto_lat" not in st.session_state:
+            st.session_state["auto_lat"] = None
+        if "auto_lon" not in st.session_state:
+            st.session_state["auto_lon"] = None
+
+        # Jika klik di peta, ambil koordinat
         if loc and loc["last_clicked"]:
             latitude = loc["last_clicked"]["lat"]
             longitude = loc["last_clicked"]["lng"]
+            st.session_state["auto_lat"] = latitude
+            st.session_state["auto_lon"] = longitude
             st.success(f"Lokasi terpilih: {latitude}, {longitude}")
         else:
-            st.info("Klik pada peta untuk memilih lokasi.")
+            # Tombol deteksi lokasi otomatis
+            if st.button("Deteksi Lokasi Otomatis"):
+                try:
+                    ipinfo = requests.get("https://ipinfo.io/json").json()
+                    if "loc" in ipinfo:
+                        latlon = ipinfo["loc"].split(",")
+                        st.session_state["auto_lat"] = float(latlon[0])
+                        st.session_state["auto_lon"] = float(latlon[1])
+                        st.success(f"Lokasi otomatis: {st.session_state['auto_lat']}, {st.session_state['auto_lon']}")
+                    else:
+                        st.warning("Gagal mendeteksi lokasi dari IP.")
+                except Exception:
+                    st.warning("Gagal mendeteksi lokasi dari IP.")
+            # Tampilkan koordinat otomatis jika sudah ada
+            if st.session_state["auto_lat"] and st.session_state["auto_lon"]:
+                latitude = st.session_state["auto_lat"]
+                longitude = st.session_state["auto_lon"]
+                st.info(f"Koordinat otomatis: {latitude}, {longitude}")
+            else:
+                st.info("Klik pada peta atau tekan tombol untuk mendeteksi lokasi.")
 
     location_address = st.text_area("Alamat Lokasi*", height=100)
     
